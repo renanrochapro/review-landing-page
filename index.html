@@ -186,37 +186,88 @@
     // Buscar dados do pedido no n8n
     async function fetchOrderData() {
       try {
-        console.log('Buscando pedido:', orderNumber);
+        console.log('🔍 Buscando pedido:', orderNumber);
         
-        const response = await fetch(
-          `https://n8n-n8n.u7yjc3.easypanel.host/webhook/get-order-items?order_number=${orderNumber}`
-        );
+        const url = `https://n8n-n8n.u7yjc3.easypanel.host/webhook/get-order-items?order_number=${orderNumber}`;
+        console.log('📡 URL da requisição:', url);
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
 
-        console.log('Response status:', response.status);
+        console.log('📊 Response status:', response.status);
+        console.log('📊 Response headers:', response.headers);
 
         if (!response.ok) {
-          throw new Error('Pedido não encontrado no sistema');
+          throw new Error(`Erro HTTP: ${response.status}`);
         }
 
-        const data = await response.json();
-        console.log('Dados recebidos:', data);
+        // Pegar o texto bruto primeiro para debug
+        const textData = await response.text();
+        console.log('📄 Response texto bruto:', textData);
 
-        if (!data || data.length === 0) {
-          throw new Error('Pedido não encontrado no banco de dados');
+        // Tentar fazer parse do JSON
+        let data;
+        try {
+          data = JSON.parse(textData);
+          console.log('✅ JSON parseado com sucesso:', data);
+        } catch (parseError) {
+          console.error('❌ Erro ao fazer parse do JSON:', parseError);
+          throw new Error('Resposta inválida do servidor');
         }
 
-        orderData = data[0];
-        console.log('Order data processado:', orderData);
-        
+        // Validar estrutura dos dados
+        if (!data) {
+          throw new Error('Resposta vazia do servidor');
+        }
+
+        // Se data é um array, pegar o primeiro elemento
+        if (Array.isArray(data)) {
+          console.log('📦 Data é um array com', data.length, 'elementos');
+          if (data.length === 0) {
+            throw new Error('Pedido não encontrado no banco de dados');
+          }
+          orderData = data[0];
+        } else {
+          // Se não é array, usar diretamente
+          console.log('📦 Data é um objeto');
+          orderData = data;
+        }
+
+        console.log('✅ Order data final:', orderData);
+
+        // Validar campos obrigatórios
+        if (!orderData.customer_firstname) {
+          console.error('❌ Campo customer_firstname não encontrado');
+          console.error('Estrutura recebida:', Object.keys(orderData));
+          throw new Error('Dados do pedido incompletos (falta nome do cliente)');
+        }
+
+        if (!orderData.items || !Array.isArray(orderData.items)) {
+          console.error('❌ Campo items não encontrado ou não é array');
+          throw new Error('Dados do pedido incompletos (falta lista de produtos)');
+        }
+
+        console.log('🎉 Dados validados com sucesso! Renderizando página...');
         renderPage();
+        
       } catch (error) {
-        console.error('Erro ao buscar pedido:', error);
+        console.error('❌ Erro completo:', error);
+        console.error('❌ Stack trace:', error.stack);
+        
         document.getElementById('form-container').innerHTML = `
           <div class="error">
             <h2>❌ Erro ao Carregar Pedido</h2>
             <p>${error.message}</p>
             <p class="order-info">Pedido: ${orderNumber}</p>
             <p style="margin-top: 15px; font-size: 14px;">Se o problema persistir, entre em contato conosco.</p>
+            <details style="margin-top: 20px; text-align: left; font-size: 12px; color: #666;">
+              <summary style="cursor: pointer;">Detalhes técnicos (clique para expandir)</summary>
+              <pre style="margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px; overflow: auto;">${error.stack || error.message}</pre>
+            </details>
           </div>
         `;
       }
@@ -324,7 +375,7 @@
         reviews: reviewsArray
       };
 
-      console.log('Enviando payload:', payload);
+      console.log('📤 Enviando payload:', payload);
 
       // Desabilitar botão
       const btn = document.getElementById('submit-btn');
@@ -341,7 +392,7 @@
           body: JSON.stringify(payload)
         });
 
-        console.log('Response status:', response.status);
+        console.log('📊 Response status:', response.status);
 
         if (response.ok) {
           document.getElementById('form-container').innerHTML = `
@@ -355,7 +406,7 @@
           throw new Error('Erro no envio da avaliação');
         }
       } catch (error) {
-        console.error('Erro ao enviar avaliação:', error);
+        console.error('❌ Erro ao enviar avaliação:', error);
         alert('Erro ao enviar avaliação. Por favor, tente novamente.');
         btn.disabled = false;
         btn.textContent = 'Enviar Avaliações';
