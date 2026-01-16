@@ -6,7 +6,7 @@
   <title>Avalie seu Pedido - Linda Casa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,7 +15,7 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Radio Canada Big', sans-serif;
       background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%);
       padding: 20px;
       min-height: 100vh;
@@ -35,6 +35,17 @@
       margin: 0 auto 10px;
       display: block;
       filter: drop-shadow(0 2px 8px rgba(255, 92, 127, 0.15));
+    }
+
+    /* Mensagem de erro da logo para debug */
+    .logo-error {
+      color: #c92b5c;
+      font-size: 12px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #ffe8ed;
+      border-radius: 8px;
+      display: none;
     }
 
     .container {
@@ -62,6 +73,12 @@
       font-size: 16px;
       line-height: 1.6;
       font-weight: 400;
+    }
+
+    /* Nome do cliente em negrito */
+    .customer-name {
+      font-weight: 700;
+      color: #37312F;
     }
 
     .order-info {
@@ -131,11 +148,11 @@
       line-height: 1.6;
     }
 
-    /* Card de Produto - O coração da conversão */
+    /* Card de Produto - Mais compacto */
     .product {
       border: 2px solid #ffe8ed;
-      padding: 30px;
-      margin-bottom: 25px;
+      padding: 20px;
+      margin-bottom: 20px;
       border-radius: 16px;
       background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%);
       transition: all 0.3s ease;
@@ -166,33 +183,34 @@
     }
 
     .product-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       color: #37312F;
       line-height: 1.4;
     }
 
-    /* Sistema de Estrelas - Elemento crítico de interação */
+    /* Sistema de Estrelas - Começa preenchido e inverte no hover */
     .stars {
       display: flex;
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       justify-content: center;
-      padding: 15px 0;
+      padding: 10px 0;
     }
 
     .star {
-      font-size: 42px;
+      font-size: 38px;
       cursor: pointer;
       transition: all 0.2s ease;
       user-select: none;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
+    /* Estrelas vazias agora com mais contraste */
     .star.empty {
-      color: #ffe8ed;
-      text-shadow: 0 0 1px rgba(138, 38, 91, 0.2);
+      color: #ffc4d0;
+      text-shadow: 0 0 2px rgba(138, 38, 91, 0.4);
     }
 
     .star.filled {
@@ -201,26 +219,26 @@
     }
 
     .star:hover {
-      transform: scale(1.2) rotate(-10deg);
+      transform: scale(1.15) rotate(-8deg);
     }
 
     .star:active {
-      transform: scale(1.1) rotate(0deg);
+      transform: scale(1.05) rotate(0deg);
     }
 
-    /* Textarea com estilo refinado */
+    /* Textarea com estilo refinado e mais compacto */
     textarea {
       width: 100%;
-      padding: 15px;
+      padding: 12px;
       border: 2px solid #ffe8ed;
       border-radius: 12px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Radio Canada Big', sans-serif;
       resize: vertical;
       font-size: 14px;
       color: #37312F;
       transition: all 0.3s ease;
       background: #fafafa;
-      min-height: 90px;
+      min-height: 70px;
     }
 
     textarea::placeholder {
@@ -248,7 +266,7 @@
       cursor: pointer;
       margin-top: 30px;
       transition: all 0.3s ease;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Radio Canada Big', sans-serif;
       box-shadow: 0 6px 20px rgba(0, 189, 160, 0.3);
       position: relative;
       overflow: hidden;
@@ -316,15 +334,6 @@
       50% { transform: translateY(-20px); }
     }
 
-    /* Destaque amarelo para informações importantes */
-    .highlight {
-      background: #FCE483;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 600;
-      color: #37312F;
-    }
-
     /* Detalhes técnicos */
     details {
       margin-top: 25px;
@@ -372,19 +381,20 @@
       }
 
       .product {
-        padding: 20px;
+        padding: 16px;
       }
 
       .product-name {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .star {
-        font-size: 36px;
+        font-size: 34px;
       }
 
       .stars {
         gap: 6px;
+        padding: 8px 0;
       }
 
       .btn-submit {
@@ -401,7 +411,13 @@
 <body>
   <!-- Header com Logo da Marca -->
   <div class="header">
-    <img src="https://github.com/user-attachments/assets/3b5c9c44-cb68-4715-b726-a15bfb11870a" alt="Linda Casa" class="logo">
+    <img src="https://github.com/user-attachments/assets/3b5c9c44-cb68-4715-b726-a15bfb11870a" 
+         alt="Linda Casa" 
+         class="logo" 
+         onerror="this.style.display='none'; document.getElementById('logo-error').style.display='block';">
+    <div id="logo-error" class="logo-error">
+      ⚠️ Logo não carregada. Verifique a URL da imagem.
+    </div>
   </div>
 
   <div class="container" id="form-container">
@@ -528,7 +544,7 @@
       
       container.innerHTML = `
         <h1>Avalie seu Pedido 🌟</h1>
-        <p class="subtitle">Olá, <span class="highlight">${orderData.customer_firstname}</span>! Sua opinião é muito importante para nós!</p>
+        <p class="subtitle">Olá, <span class="customer-name">${orderData.customer_firstname}</span>! Abaixo você vai ver os itens que compõem o seu pedido e pode escolher aqueles que deseja avaliar. Sua opinião é muito importante para nós!</p>
         <p class="order-info">📦 Pedido: #${orderNumber}</p>
         <div id="products"></div>
         <button class="btn-submit" id="submit-btn">✨ Enviar Avaliações</button>
@@ -547,9 +563,10 @@
         const productDiv = document.createElement('div');
         productDiv.className = 'product';
         
+        // Começar com todas as estrelas preenchidas
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
-          starsHtml += `<span class="star empty" data-rating="${i}">★</span>`;
+          starsHtml += `<span class="star filled" data-rating="${i}">★</span>`;
         }
         
         productDiv.innerHTML = `
@@ -562,7 +579,7 @@
         
         productsContainer.appendChild(productDiv);
 
-        // Event listeners para estrelas
+        // Event listeners para estrelas com comportamento invertido
         const stars = productDiv.querySelectorAll('.star');
         
         stars.forEach((star) => {
@@ -574,13 +591,13 @@
               rating: rating
             };
             
-            // Atualizar visual
+            // Atualizar visual - agora salva o estado clicado
             stars.forEach((s, i) => {
               s.className = i < rating ? 'star filled' : 'star empty';
             });
           });
 
-          // Hover effect
+          // Hover effect - mostra preview da avaliação
           star.addEventListener('mouseenter', () => {
             const rating = parseInt(star.dataset.rating);
             stars.forEach((s, i) => {
@@ -591,9 +608,14 @@
 
         // Restaurar estado ao sair do hover
         productDiv.addEventListener('mouseleave', () => {
-          const currentRating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
+          const currentRating = reviews[item.product_id] ? reviews[item.product_id].rating : 5;
           stars.forEach((s, i) => {
-            s.className = i < currentRating ? 'star filled' : 'star empty';
+            // Se já foi avaliado, mostra a avaliação. Se não, mostra todas preenchidas
+            if (reviews[item.product_id]) {
+              s.className = i < currentRating ? 'star filled' : 'star empty';
+            } else {
+              s.className = 'star filled';
+            }
           });
         });
       });
