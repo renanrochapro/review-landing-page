@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avalie seu Pedido</title>
+  <title>Avalie seu Pedido - Linda Casa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -12,153 +15,399 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%);
       padding: 20px;
+      min-height: 100vh;
+      color: #37312F;
+    }
+
+    /* Header com Logo */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+    }
+
+    .logo {
+      max-width: 200px;
+      height: auto;
+      margin: 0 auto 10px;
+      display: block;
+      filter: drop-shadow(0 2px 8px rgba(255, 92, 127, 0.15));
     }
 
     .container {
-      max-width: 600px;
+      max-width: 680px;
       margin: 0 auto;
       background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 45px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(138, 38, 91, 0.12);
+      border: 1px solid rgba(255, 92, 127, 0.08);
     }
 
+    /* Títulos com a identidade da marca */
     h1 {
-      color: #333;
-      margin-bottom: 10px;
+      color: #c92b5c;
+      margin-bottom: 12px;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.3;
     }
 
     .subtitle {
-      color: #666;
-      margin-bottom: 30px;
+      color: #70655C;
+      margin-bottom: 25px;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 400;
     }
 
+    .order-info {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff5c7f 0%, #c92b5c 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(255, 92, 127, 0.25);
+    }
+
+    /* Estados de Loading */
     .loading {
       text-align: center;
-      padding: 40px;
-      color: #666;
+      padding: 60px 20px;
+      color: #70655C;
     }
 
     .loading h2 {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      color: #c92b5c;
+      font-size: 24px;
+      font-weight: 600;
     }
 
+    .loading p {
+      font-size: 15px;
+    }
+
+    /* Spinner animado */
+    .loading::before {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 20px;
+      border: 4px solid #ffe8ed;
+      border-top: 4px solid #ff5c7f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Estados de Erro */
     .error {
       text-align: center;
-      padding: 40px;
-      color: #d32f2f;
+      padding: 50px 20px;
+      color: #8a265b;
     }
 
     .error h2 {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
+      color: #c92b5c;
+      font-size: 24px;
+      font-weight: 600;
     }
 
+    .error p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    /* Card de Produto - O coração da conversão */
     .product {
-      border: 1px solid #e0e0e0;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      background: #fafafa;
+      border: 2px solid #ffe8ed;
+      padding: 30px;
+      margin-bottom: 25px;
+      border-radius: 16px;
+      background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .product:hover {
+      border-color: #ff5c7f;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15);
+    }
+
+    .product:hover::before {
+      opacity: 1;
     }
 
     .product-name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #333;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #37312F;
+      line-height: 1.4;
     }
 
+    /* Sistema de Estrelas - Elemento crítico de interação */
     .stars {
       display: flex;
-      gap: 5px;
-      margin-bottom: 15px;
+      gap: 8px;
+      margin-bottom: 20px;
+      justify-content: center;
+      padding: 15px 0;
     }
 
     .star {
-      font-size: 32px;
+      font-size: 42px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s ease;
       user-select: none;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .star.empty {
-      color: #ddd;
+      color: #ffe8ed;
+      text-shadow: 0 0 1px rgba(138, 38, 91, 0.2);
     }
 
     .star.filled {
-      color: #FFD700;
+      color: #FCE483;
+      text-shadow: 0 0 8px rgba(252, 228, 131, 0.6);
     }
 
     .star:hover {
-      transform: scale(1.1);
+      transform: scale(1.2) rotate(-10deg);
     }
 
+    .star:active {
+      transform: scale(1.1) rotate(0deg);
+    }
+
+    /* Textarea com estilo refinado */
     textarea {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-family: Arial;
+      padding: 15px;
+      border: 2px solid #ffe8ed;
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
       resize: vertical;
       font-size: 14px;
+      color: #37312F;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      min-height: 90px;
+    }
+
+    textarea::placeholder {
+      color: #70655C;
+      opacity: 0.7;
     }
 
     textarea:focus {
       outline: none;
-      border-color: #FF6B35;
+      border-color: #ff5c7f;
+      background: white;
+      box-shadow: 0 4px 16px rgba(255, 92, 127, 0.12);
     }
 
+    /* Botão de Envio - CTA Principal */
     .btn-submit {
       width: 100%;
-      background: #FF6B35;
+      background: linear-gradient(135deg, #00bda0 0%, #009d85 100%);
       color: white;
       border: none;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 5px;
+      padding: 18px 30px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 12px;
       cursor: pointer;
-      margin-top: 20px;
-      transition: 0.3s;
+      margin-top: 30px;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 6px 20px rgba(0, 189, 160, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
     }
 
     .btn-submit:hover {
-      background: #e55a2b;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+      background: linear-gradient(135deg, #00d4b5 0%, #00bda0 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 189, 160, 0.4);
+    }
+
+    .btn-submit:hover::before {
+      left: 100%;
+    }
+
+    .btn-submit:active {
+      transform: translateY(-1px);
     }
 
     .btn-submit:disabled {
-      background: #ccc;
+      background: linear-gradient(135deg, #ccc 0%, #aaa 100%);
       cursor: not-allowed;
       transform: none;
+      box-shadow: none;
     }
 
+    /* Mensagem de Sucesso */
     .success {
       text-align: center;
-      padding: 40px;
+      padding: 60px 30px;
     }
 
     .success h1 {
-      color: #4CAF50;
-      margin-bottom: 15px;
+      color: #00bda0;
+      margin-bottom: 20px;
+      font-size: 36px;
     }
 
-    .order-info {
-      color: #888;
-      font-size: 14px;
+    .success p {
+      color: #70655C;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .success .emoji {
+      font-size: 80px;
       margin-bottom: 20px;
+      display: block;
+      animation: bounce 0.6s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Destaque amarelo para informações importantes */
+    .highlight {
+      background: #FCE483;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      color: #37312F;
+    }
+
+    /* Detalhes técnicos */
+    details {
+      margin-top: 25px;
+      padding: 15px;
+      background: #fafafa;
+      border-radius: 8px;
+      border: 1px solid #ffe8ed;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: #70655C;
+      font-size: 13px;
+    }
+
+    pre {
+      margin-top: 12px;
+      padding: 12px;
+      background: white;
+      border-radius: 6px;
+      overflow: auto;
+      font-size: 11px;
+      border: 1px solid #ffe8ed;
+      color: #37312F;
+    }
+
+    /* Responsividade */
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 30px 20px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+      }
+
+      .product {
+        padding: 20px;
+      }
+
+      .product-name {
+        font-size: 18px;
+      }
+
+      .star {
+        font-size: 36px;
+      }
+
+      .stars {
+        gap: 6px;
+      }
+
+      .btn-submit {
+        font-size: 16px;
+        padding: 16px 24px;
+      }
+
+      .logo {
+        max-width: 160px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Header com Logo da Marca -->
+  <div class="header">
+    <img src="https://king-assets.yampi.io/dooki/69407f85d21f3/69407f85d21fc.png" alt="Linda Casa" class="logo">
+  </div>
+
   <div class="container" id="form-container">
     <div class="loading">
-      <h2>🔍 Carregando seu pedido...</h2>
-      <p>Aguarde um momento</p>
+      <h2>Carregando seu pedido...</h2>
+      <p>Aguarde um momento enquanto buscamos suas informações</p>
     </div>
   </div>
 
@@ -279,10 +528,10 @@
       
       container.innerHTML = `
         <h1>Avalie seu Pedido 🌟</h1>
-        <p class="subtitle">Olá, ${orderData.customer_firstname}! Sua opinião é muito importante para nós!</p>
-        <p class="order-info">Pedido: #${orderNumber}</p>
+        <p class="subtitle">Olá, <span class="highlight">${orderData.customer_firstname}</span>! Sua opinião é muito importante para nós!</p>
+        <p class="order-info">📦 Pedido: #${orderNumber}</p>
         <div id="products"></div>
-        <button class="btn-submit" id="submit-btn">Enviar Avaliações</button>
+        <button class="btn-submit" id="submit-btn">✨ Enviar Avaliações</button>
       `;
 
       const productsContainer = document.getElementById('products');
@@ -308,7 +557,7 @@
           <div class="stars" data-product-id="${item.product_id}">
             ${starsHtml}
           </div>
-          <textarea id="message-${item.product_id}" placeholder="Conte mais sobre sua experiência (opcional)" rows="3"></textarea>
+          <textarea id="message-${item.product_id}" placeholder="Conte mais sobre sua experiência com este produto... (opcional)" rows="3"></textarea>
         `;
         
         productsContainer.appendChild(productDiv);
@@ -397,9 +646,10 @@
         if (response.ok) {
           document.getElementById('form-container').innerHTML = `
             <div class="success">
-              <h1>✅ Obrigado, ${orderData.customer_firstname}!</h1>
+              <span class="emoji">✨</span>
+              <h1>Obrigado, ${orderData.customer_firstname}!</h1>
               <p>Sua avaliação foi registrada com sucesso.</p>
-              <p style="margin-top: 20px; color: #666;">Agradecemos pelo seu feedback!</p>
+              <p style="margin-top: 20px; color: #70655C;">Agradecemos muito pelo seu feedback! 💖</p>
             </div>
           `;
         } else {
@@ -409,7 +659,7 @@
         console.error('❌ Erro ao enviar avaliação:', error);
         alert('Erro ao enviar avaliação. Por favor, tente novamente.');
         btn.disabled = false;
-        btn.textContent = 'Enviar Avaliações';
+        btn.textContent = '✨ Enviar Avaliações';
       }
     }
 
