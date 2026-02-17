@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ... (MANTENHA TODO O SEU CSS AQUI IGUAL AO ORIGINAL) ... */
+    /* ... CSS MANTIDO IGUAL AO ORIGINAL ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Radio Canada Big', sans-serif; background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%); padding: 20px; min-height: 100vh; color: #37312F; }
     .header { text-align: center; margin-bottom: 30px; padding: 20px; }
@@ -26,10 +26,17 @@
     .error { text-align: center; padding: 50px 20px; color: #8a265b; }
     .error h2 { margin-bottom: 18px; color: #c92b5c; font-size: 24px; font-weight: 600; }
     .error p { margin-bottom: 10px; line-height: 1.6; }
+    
+    /* Card de Produto */
     .product { border: 2px solid #ffe8ed; padding: 20px; margin-bottom: 20px; border-radius: 16px; background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%); transition: all 0.3s ease; position: relative; overflow: hidden; }
     .product::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%); opacity: 0; transition: opacity 0.3s ease; }
     .product:hover { border-color: #ff5c7f; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15); }
     .product:hover::before { opacity: 1; }
+    
+    /* Estados de Erro no Card */
+    .product.error-border { border-color: #c92b5c !important; background: #fff0f3; }
+    .error-msg { color: #c92b5c; font-size: 13px; margin-top: 8px; font-weight: 600; display: none; padding: 8px; background: rgba(201, 43, 92, 0.1); border-radius: 6px; }
+
     .product-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .product-name { font-size: 18px; font-weight: 600; margin-bottom: 0; color: #37312F; line-height: 1.4; flex: 1; }
     .status-chip { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 999px; white-space: nowrap; border: 1px solid rgba(255, 92, 127, 0.20); background: rgba(255, 92, 127, 0.10); color: #c92b5c; user-select: none; }
@@ -78,13 +85,12 @@
 
   <script>
     // --- CONFIGURAÇÃO ---
-    // URL base do seu n8n (sem o /webhook/...)
     const N8N_BASE_URL = 'https://n8n-n8n.u7yjc3.easypanel.host';
     
     // Parse URL params
     const params = new URLSearchParams(window.location.search);
     const orderNumber = params.get('order');
-    const token = params.get('token'); // NOVO: Captura o token de segurança
+    const token = params.get('token');
 
     // Variáveis globais
     let orderData = null;
@@ -99,39 +105,27 @@
           <p style="margin-top: 15px; font-size: 14px;">Por favor, utilize o botão "Avaliar" enviado no seu e-mail.</p>
         </div>
       `;
-      throw new Error('Parâmetros de segurança (order ou token) ausentes.');
+      throw new Error('Parâmetros de segurança ausentes.');
     }
 
-    // --- BUSCAR DADOS (COM SEGURANÇA) ---
+    // --- BUSCAR DADOS ---
     async function fetchOrderData() {
       try {
         console.log('🔍 Buscando pedido:', orderNumber);
-
-        // AGORA INCLUÍMOS O TOKEN NA URL
         const url = `${N8N_BASE_URL}/webhook/get-order-items?order_number=${orderNumber}&token=${token}`;
         
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-            // REMOVIDO: Authorization header (não necessário mais)
-          }
-        });
+        const response = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
 
-        if (!response.ok) {
-          throw new Error(`Erro HTTP: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
 
         const data = await response.json();
         
-        // Se retornar array vazio ou nulo, o token ou pedido estão errados
         if (!data || (Array.isArray(data) && data.length === 0)) {
           throw new Error('Pedido não encontrado ou link expirado.');
         }
 
         orderData = Array.isArray(data) ? data[0] : data;
         
-        // Validação extra dos dados retornados
         if (!orderData.items || !Array.isArray(orderData.items)) {
           throw new Error('Dados do pedido incompletos.');
         }
@@ -144,7 +138,6 @@
           <div class="error">
             <h2>❌ Não foi possível carregar</h2>
             <p>${error.message === 'Failed to fetch' ? 'Erro de conexão.' : error.message}</p>
-            <p style="margin-top: 15px; font-size: 14px;">Tente recarregar a página ou entre em contato conosco.</p>
           </div>
         `;
       }
@@ -157,20 +150,13 @@
       });
     }
 
-    function ratingLineText(rating) {
-      if (!rating || rating < 1) return '';
-      return `Você selecionou: ${rating} ${rating === 1 ? 'estrela' : 'estrelas'}`;
-    }
-
     function renderPage() {
       const container = document.getElementById('form-container');
-      
-      // Sanitização básica do nome para evitar XSS
       const safeName = orderData.customer_firstname.replace(/[<>]/g, '');
 
       container.innerHTML = `
         <h1>Avalie seu Pedido 🌟</h1>
-        <p class="subtitle">Olá, <span class="customer-name">${safeName}</span>! Abaixo você vai ver os itens que compõem o seu pedido e pode escolher aqueles que deseja avaliar.</p>
+        <p class="subtitle">Olá, <span class="customer-name">${safeName}</span>! Para avaliar um produto, por favor dê uma nota e deixe seu comentário. Ambos são importantes para nós!</p>
         <p class="order-info">📦 Pedido: #${orderNumber}</p>
         <div id="products"></div>
         <button class="btn-submit" id="submit-btn">✨ Enviar Avaliações</button>
@@ -181,8 +167,8 @@
       orderData.items.forEach((item) => {
         const productDiv = document.createElement('div');
         productDiv.className = 'product';
+        productDiv.id = `product-card-${item.product_id}`;
 
-        // Sanitização do nome do produto
         const safeProductName = (item.product_name || 'Produto').replace(/[<>]/g, '');
 
         let starsHtml = '';
@@ -199,12 +185,13 @@
             ${starsHtml}
           </div>
           <div class="rating-line" id="rating-line-${item.product_id}"></div>
-          <textarea id="message-${item.product_id}" placeholder="Conte mais sobre sua experiência... (opcional)" rows="3"></textarea>
+          
+          <textarea id="message-${item.product_id}" placeholder="Escreva sua opinião aqui... (Obrigatório se der nota)" rows="3"></textarea>
+          <div class="error-msg" id="error-${item.product_id}"></div>
         `;
 
         productsContainer.appendChild(productDiv);
 
-        // Lógica de Estrelas
         const stars = productDiv.querySelectorAll('.star');
         const statusChip = productDiv.querySelector(`#status-${item.product_id}`);
         const ratingLine = productDiv.querySelector(`#rating-line-${item.product_id}`);
@@ -212,20 +199,28 @@
         stars.forEach((star) => {
           star.addEventListener('click', () => {
             const rating = parseInt(star.dataset.rating);
-            reviews[item.product_id] = {
-              product_id: item.product_id,
-              product_name: item.product_name,
-              rating: rating
-            };
+            reviews[item.product_id] = { ...reviews[item.product_id], rating: rating };
+            
             setStarsVisual(stars, rating);
-            ratingLine.textContent = ratingLineText(rating);
-            statusChip.textContent = 'Avaliado';
+            ratingLine.textContent = `Nota: ${rating}/5`;
+            statusChip.textContent = 'Em preenchimento...';
             statusChip.classList.add('done');
+            
+            // Limpa erro visual ao interagir
+            document.getElementById(`error-${item.product_id}`).style.display = 'none';
+            productDiv.classList.remove('error-border');
           });
 
           star.addEventListener('mouseenter', () => {
             setStarsVisual(stars, parseInt(star.dataset.rating));
           });
+        });
+        
+        // Limpa erro ao digitar no textarea também
+        const txtArea = productDiv.querySelector('textarea');
+        txtArea.addEventListener('input', () => {
+             document.getElementById(`error-${item.product_id}`).style.display = 'none';
+             productDiv.classList.remove('error-border');
         });
 
         productDiv.addEventListener('mouseleave', () => {
@@ -237,26 +232,76 @@
       document.getElementById('submit-btn').addEventListener('click', submitReviews);
     }
 
-    // --- ENVIAR AVALIAÇÕES ---
+    // --- NOVA LÓGICA DE ENVIO E VALIDAÇÃO ---
     async function submitReviews() {
-      const reviewsArray = Object.values(reviews);
+      // Limpar erros anteriores
+      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.product').forEach(el => el.classList.remove('error-border'));
 
-      if (reviewsArray.length === 0) {
-        alert('Por favor, avalie pelo menos um produto!');
+      const itemsToSubmit = [];
+      let hasError = false;
+      let hasAtLeastOne = false;
+
+      // Iterar sobre todos os produtos da tela para validar um por um
+      orderData.items.forEach(item => {
+        const rating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
+        const messageInput = document.getElementById(`message-${item.product_id}`);
+        const message = messageInput.value.trim();
+        const errorDiv = document.getElementById(`error-${item.product_id}`);
+        const cardDiv = document.getElementById(`product-card-${item.product_id}`);
+
+        // Cenário 1: Cliente não fez nada neste produto (OK, ignora)
+        if (rating === 0 && message === '') {
+          return;
+        }
+
+        // Cenário 2: Tem nota mas não tem texto (ERRO)
+        if (rating > 0 && message === '') {
+          errorDiv.textContent = '⚠️ Por favor, escreva um comentário para completar sua avaliação.';
+          errorDiv.style.display = 'block';
+          cardDiv.classList.add('error-border');
+          hasError = true;
+          return;
+        }
+
+        // Cenário 3: Tem texto mas não tem nota (ERRO)
+        if (rating === 0 && message.length > 0) {
+          errorDiv.textContent = '⚠️ Por favor, selecione uma nota (estrelas) para este produto.';
+          errorDiv.style.display = 'block';
+          cardDiv.classList.add('error-border');
+          hasError = true;
+          return;
+        }
+
+        // Cenário 4: Tudo certo (Adiciona para envio)
+        if (rating > 0 && message.length > 0) {
+          itemsToSubmit.push({
+            product_id: item.product_id,
+            product_name: item.product_name,
+            rating: rating,
+            message: message
+          });
+          hasAtLeastOne = true;
+        }
+      });
+
+      if (hasError) {
+        alert('Ops! Algumas avaliações estão incompletas. Verifique os itens marcados em vermelho.');
         return;
       }
 
-      reviewsArray.forEach((review) => {
-        const msgInput = document.getElementById(`message-${review.product_id}`);
-        review.message = msgInput ? msgInput.value : '';
-      });
+      if (!hasAtLeastOne) {
+        alert('Por favor, avalie pelo menos um produto antes de enviar.');
+        return;
+      }
 
+      // Preparar Payload
       const payload = {
         order_number: orderNumber,
         customer_email: orderData.customer_email,
         customer_name: `${orderData.customer_firstname} ${orderData.customer_lastname}`,
-        reviews: reviewsArray,
-        token: token // Enviamos o token também na confirmação
+        reviews: itemsToSubmit,
+        token: token
       };
 
       const btn = document.getElementById('submit-btn');
@@ -264,7 +309,6 @@
       btn.textContent = 'Enviando...';
 
       try {
-        // URL DE PRODUÇÃO (sem -test)
         const response = await fetch(`${N8N_BASE_URL}/webhook/create_review`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -276,7 +320,7 @@
             <div class="success">
               <span class="emoji">✨</span>
               <h1>Obrigado!</h1>
-              <p>Sua avaliação foi registrada com sucesso.</p>
+              <p>Suas avaliações foram enviadas com sucesso.</p>
               <p style="margin-top: 20px; color: #70655C;">Agradecemos muito pelo feedback! 💖</p>
             </div>
           `;
