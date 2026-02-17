@@ -8,412 +8,57 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Radio Canada Big', sans-serif;
-      background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%);
-      padding: 20px;
-      min-height: 100vh;
-      color: #37312F;
-    }
-
-    /* Header com Logo */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-    }
-
-    .logo {
-      max-width: 200px;
-      height: auto;
-      margin: 0 auto 10px;
-      display: block;
-      filter: drop-shadow(0 2px 8px rgba(255, 92, 127, 0.15));
-    }
-
-    .container {
-      max-width: 680px;
-      margin: 0 auto;
-      background: white;
-      padding: 45px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(138, 38, 91, 0.12);
-      border: 1px solid rgba(255, 92, 127, 0.08);
-    }
-
-    /* Títulos com a identidade da marca */
-    h1 {
-      color: #c92b5c;
-      margin-bottom: 12px;
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .subtitle {
-      color: #70655C;
-      margin-bottom: 25px;
-      font-size: 16px;
-      line-height: 1.6;
-      font-weight: 400;
-    }
-
-    /* Nome do cliente em negrito */
-    .customer-name {
-      font-weight: 700;
-      color: #37312F;
-    }
-
-    .order-info {
-      display: inline-block;
-      background: linear-gradient(135deg, #ff5c7f 0%, #c92b5c 100%);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 25px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(255, 92, 127, 0.25);
-    }
-
-    /* Estados de Loading */
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: #70655C;
-    }
-
-    .loading h2 {
-      margin-bottom: 15px;
-      color: #c92b5c;
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .loading p {
-      font-size: 15px;
-    }
-
-    /* Spinner animado */
-    .loading::before {
-      content: '';
-      display: block;
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 20px;
-      border: 4px solid #ffe8ed;
-      border-top: 4px solid #ff5c7f;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Estados de Erro */
-    .error {
-      text-align: center;
-      padding: 50px 20px;
-      color: #8a265b;
-    }
-
-    .error h2 {
-      margin-bottom: 18px;
-      color: #c92b5c;
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .error p {
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-
-    /* Card de Produto - Mais compacto */
-    .product {
-      border: 2px solid #ffe8ed;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 16px;
-      background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .product::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .product:hover {
-      border-color: #ff5c7f;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15);
-    }
-
-    .product:hover::before {
-      opacity: 1;
-    }
-
-    /* Topo do card: nome + chip */
-    .product-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .product-name {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 0;
-      color: #37312F;
-      line-height: 1.4;
-      flex: 1;
-    }
-
-    .status-chip {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-      border: 1px solid rgba(255, 92, 127, 0.20);
-      background: rgba(255, 92, 127, 0.10);
-      color: #c92b5c;
-      user-select: none;
-    }
-
-    .status-chip.done {
-      border: 1px solid rgba(0, 189, 160, 0.25);
-      background: rgba(0, 189, 160, 0.12);
-      color: #009d85;
-    }
-
-    /* Sistema de Estrelas */
-    .stars {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-      justify-content: center;
-      padding: 10px 0 6px;
-    }
-
-    .star {
-      font-size: 38px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .star.empty {
-      color: #ffc4d0;
-      text-shadow: 0 0 2px rgba(138, 38, 91, 0.4);
-    }
-
-    .star.filled {
-      color: #FCE483;
-      text-shadow: 0 0 8px rgba(252, 228, 131, 0.6);
-    }
-
-    .star:hover {
-      transform: scale(1.15) rotate(-8deg);
-    }
-
-    .star:active {
-      transform: scale(1.05) rotate(0deg);
-    }
-
-    /* Linha de confirmação da seleção */
-    .rating-line {
-      text-align: center;
-      font-size: 13px;
-      color: #70655C;
-      margin-bottom: 12px;
-      min-height: 18px; /* reserva espaço para não “pular” */
-    }
-
-    /* Textarea */
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #ffe8ed;
-      border-radius: 12px;
-      font-family: 'Radio Canada Big', sans-serif;
-      resize: vertical;
-      font-size: 14px;
-      color: #37312F;
-      transition: all 0.3s ease;
-      background: #fafafa;
-      min-height: 70px;
-    }
-
-    textarea::placeholder {
-      color: #70655C;
-      opacity: 0.7;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: #ff5c7f;
-      background: white;
-      box-shadow: 0 4px 16px rgba(255, 92, 127, 0.12);
-    }
-
-    /* Botão de Envio */
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #00bda0 0%, #009d85 100%);
-      color: white;
-      border: none;
-      padding: 18px 30px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: all 0.3s ease;
-      font-family: 'Radio Canada Big', sans-serif;
-      box-shadow: 0 6px 20px rgba(0, 189, 160, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-submit::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .btn-submit:hover {
-      background: linear-gradient(135deg, #00d4b5 0%, #00bda0 100%);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 189, 160, 0.4);
-    }
-
-    .btn-submit:hover::before {
-      left: 100%;
-    }
-
-    .btn-submit:active {
-      transform: translateY(-1px);
-    }
-
-    .btn-submit:disabled {
-      background: linear-gradient(135deg, #ccc 0%, #aaa 100%);
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    /* Mensagem de Sucesso */
-    .success {
-      text-align: center;
-      padding: 60px 30px;
-    }
-
-    .success h1 {
-      color: #00bda0;
-      margin-bottom: 20px;
-      font-size: 36px;
-    }
-
-    .success p {
-      color: #70655C;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .success .emoji {
-      font-size: 80px;
-      margin-bottom: 20px;
-      display: block;
-      animation: bounce 0.6s ease;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
-
-    /* Detalhes técnicos */
-    details {
-      margin-top: 25px;
-      padding: 15px;
-      background: #fafafa;
-      border-radius: 8px;
-      border: 1px solid #ffe8ed;
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: 500;
-      color: #70655C;
-      font-size: 13px;
-    }
-
-    pre {
-      margin-top: 12px;
-      padding: 12px;
-      background: white;
-      border-radius: 6px;
-      overflow: auto;
-      font-size: 11px;
-      border: 1px solid #ffe8ed;
-      color: #37312F;
-    }
-
-    /* Responsividade */
-    @media (max-width: 640px) {
-      body { padding: 10px; }
-
-      .container {
-        padding: 30px 20px;
-        border-radius: 16px;
-      }
-
-      h1 { font-size: 26px; }
-      .subtitle { font-size: 15px; }
-      .product { padding: 16px; }
-      .product-name { font-size: 16px; }
-      .star { font-size: 34px; }
-
-      .stars {
-        gap: 6px;
-        padding: 8px 0 4px;
-      }
-
-      .btn-submit {
-        font-size: 16px;
-        padding: 16px 24px;
-      }
-
-      .logo { max-width: 160px; }
-    }
+    /* ... (MANTENHA TODO O SEU CSS AQUI IGUAL AO ORIGINAL) ... */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Radio Canada Big', sans-serif; background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%); padding: 20px; min-height: 100vh; color: #37312F; }
+    .header { text-align: center; margin-bottom: 30px; padding: 20px; }
+    .logo { max-width: 200px; height: auto; margin: 0 auto 10px; display: block; filter: drop-shadow(0 2px 8px rgba(255, 92, 127, 0.15)); }
+    .container { max-width: 680px; margin: 0 auto; background: white; padding: 45px 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(138, 38, 91, 0.12); border: 1px solid rgba(255, 92, 127, 0.08); }
+    h1 { color: #c92b5c; margin-bottom: 12px; font-size: 32px; font-weight: 700; line-height: 1.3; }
+    .subtitle { color: #70655C; margin-bottom: 25px; font-size: 16px; line-height: 1.6; font-weight: 400; }
+    .customer-name { font-weight: 700; color: #37312F; }
+    .order-info { display: inline-block; background: linear-gradient(135deg, #ff5c7f 0%, #c92b5c 100%); color: white; padding: 8px 20px; border-radius: 25px; font-size: 13px; font-weight: 600; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(255, 92, 127, 0.25); }
+    .loading { text-align: center; padding: 60px 20px; color: #70655C; }
+    .loading h2 { margin-bottom: 15px; color: #c92b5c; font-size: 24px; font-weight: 600; }
+    .loading p { font-size: 15px; }
+    .loading::before { content: ''; display: block; width: 50px; height: 50px; margin: 0 auto 20px; border: 4px solid #ffe8ed; border-top: 4px solid #ff5c7f; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .error { text-align: center; padding: 50px 20px; color: #8a265b; }
+    .error h2 { margin-bottom: 18px; color: #c92b5c; font-size: 24px; font-weight: 600; }
+    .error p { margin-bottom: 10px; line-height: 1.6; }
+    .product { border: 2px solid #ffe8ed; padding: 20px; margin-bottom: 20px; border-radius: 16px; background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%); transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .product::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%); opacity: 0; transition: opacity 0.3s ease; }
+    .product:hover { border-color: #ff5c7f; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15); }
+    .product:hover::before { opacity: 1; }
+    .product-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .product-name { font-size: 18px; font-weight: 600; margin-bottom: 0; color: #37312F; line-height: 1.4; flex: 1; }
+    .status-chip { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 999px; white-space: nowrap; border: 1px solid rgba(255, 92, 127, 0.20); background: rgba(255, 92, 127, 0.10); color: #c92b5c; user-select: none; }
+    .status-chip.done { border: 1px solid rgba(0, 189, 160, 0.25); background: rgba(0, 189, 160, 0.12); color: #009d85; }
+    .stars { display: flex; gap: 8px; margin-bottom: 8px; justify-content: center; padding: 10px 0 6px; }
+    .star { font-size: 38px; cursor: pointer; transition: all 0.2s ease; user-select: none; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); -webkit-tap-highlight-color: transparent; }
+    .star.empty { color: #ffc4d0; text-shadow: 0 0 2px rgba(138, 38, 91, 0.4); }
+    .star.filled { color: #FCE483; text-shadow: 0 0 8px rgba(252, 228, 131, 0.6); }
+    .star:hover { transform: scale(1.15) rotate(-8deg); }
+    .star:active { transform: scale(1.05) rotate(0deg); }
+    .rating-line { text-align: center; font-size: 13px; color: #70655C; margin-bottom: 12px; min-height: 18px; }
+    textarea { width: 100%; padding: 12px; border: 2px solid #ffe8ed; border-radius: 12px; font-family: 'Radio Canada Big', sans-serif; resize: vertical; font-size: 14px; color: #37312F; transition: all 0.3s ease; background: #fafafa; min-height: 70px; }
+    textarea::placeholder { color: #70655C; opacity: 0.7; }
+    textarea:focus { outline: none; border-color: #ff5c7f; background: white; box-shadow: 0 4px 16px rgba(255, 92, 127, 0.12); }
+    .btn-submit { width: 100%; background: linear-gradient(135deg, #00bda0 0%, #009d85 100%); color: white; border: none; padding: 18px 30px; font-size: 18px; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 30px; transition: all 0.3s ease; font-family: 'Radio Canada Big', sans-serif; box-shadow: 0 6px 20px rgba(0, 189, 160, 0.3); position: relative; overflow: hidden; }
+    .btn-submit::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); transition: left 0.5s ease; }
+    .btn-submit:hover { background: linear-gradient(135deg, #00d4b5 0%, #00bda0 100%); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 189, 160, 0.4); }
+    .btn-submit:hover::before { left: 100%; }
+    .btn-submit:active { transform: translateY(-1px); }
+    .btn-submit:disabled { background: linear-gradient(135deg, #ccc 0%, #aaa 100%); cursor: not-allowed; transform: none; box-shadow: none; }
+    .success { text-align: center; padding: 60px 30px; }
+    .success h1 { color: #00bda0; margin-bottom: 20px; font-size: 36px; }
+    .success p { color: #70655C; font-size: 16px; line-height: 1.6; }
+    .success .emoji { font-size: 80px; margin-bottom: 20px; display: block; animation: bounce 0.6s ease; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    details { margin-top: 25px; padding: 15px; background: #fafafa; border-radius: 8px; border: 1px solid #ffe8ed; }
+    summary { cursor: pointer; font-weight: 500; color: #70655C; font-size: 13px; }
+    pre { margin-top: 12px; padding: 12px; background: white; border-radius: 6px; overflow: auto; font-size: 11px; border: 1px solid #ffe8ed; color: #37312F; }
+    @media (max-width: 640px) { body { padding: 10px; } .container { padding: 30px 20px; border-radius: 16px; } h1 { font-size: 26px; } .subtitle { font-size: 15px; } .product { padding: 16px; } .product-name { font-size: 16px; } .star { font-size: 34px; } .stars { gap: 6px; padding: 8px 0 4px; } .btn-submit { font-size: 16px; padding: 16px 24px; } .logo { max-width: 160px; } }
   </style>
 </head>
 <body>
@@ -432,118 +77,80 @@
   </div>
 
   <script>
+    // --- CONFIGURAÇÃO ---
+    // URL base do seu n8n (sem o /webhook/...)
+    const N8N_BASE_URL = 'https://n8n-n8n.u7yjc3.easypanel.host';
+    
     // Parse URL params
     const params = new URLSearchParams(window.location.search);
     const orderNumber = params.get('order');
+    const token = params.get('token'); // NOVO: Captura o token de segurança
 
     // Variáveis globais
     let orderData = null;
-
-    // IMPORTANTE: agora só entra aqui quem realmente clicou (avaliou).
     const reviews = {};
 
-    // Validar order_number
-    if (!orderNumber || orderNumber.trim() === '') {
+    // --- VALIDAÇÃO INICIAL ---
+    if (!orderNumber || !token) {
       document.getElementById('form-container').innerHTML = `
         <div class="error">
           <h2>❌ Link Inválido</h2>
-          <p>Número do pedido não encontrado na URL.</p>
-          <p style="margin-top: 15px; font-size: 14px;">Por favor, utilize o link enviado por e-mail.</p>
+          <p>As informações de segurança do link estão incompletas.</p>
+          <p style="margin-top: 15px; font-size: 14px;">Por favor, utilize o botão "Avaliar" enviado no seu e-mail.</p>
         </div>
       `;
-      throw new Error('Order number não encontrado');
+      throw new Error('Parâmetros de segurança (order ou token) ausentes.');
     }
 
-    // Buscar dados do pedido no n8n (mantido como você enviou)
+    // --- BUSCAR DADOS (COM SEGURANÇA) ---
     async function fetchOrderData() {
       try {
         console.log('🔍 Buscando pedido:', orderNumber);
 
-        const url = `https://n8n-n8n.u7yjc3.easypanel.host/webhook/get-order-items?order_number=${orderNumber}`;
-        console.log('📡 URL da requisição:', url);
-
+        // AGORA INCLUÍMOS O TOKEN NA URL
+        const url = `${N8N_BASE_URL}/webhook/get-order-items?order_number=${orderNumber}&token=${token}`;
+        
         const response = await fetch(url, {
           method: 'GET',
           headers: {
             'Accept': 'application/json'
+            // REMOVIDO: Authorization header (não necessário mais)
           }
         });
-
-        console.log('📊 Response status:', response.status);
-        console.log('📊 Response headers:', response.headers);
 
         if (!response.ok) {
           throw new Error(`Erro HTTP: ${response.status}`);
         }
 
-        // Pegar o texto bruto primeiro para debug
-        const textData = await response.text();
-        console.log('📄 Response texto bruto:', textData);
-
-        // Tentar fazer parse do JSON
-        let data;
-        try {
-          data = JSON.parse(textData);
-          console.log('✅ JSON parseado com sucesso:', data);
-        } catch (parseError) {
-          console.error('❌ Erro ao fazer parse do JSON:', parseError);
-          throw new Error('Resposta inválida do servidor');
+        const data = await response.json();
+        
+        // Se retornar array vazio ou nulo, o token ou pedido estão errados
+        if (!data || (Array.isArray(data) && data.length === 0)) {
+          throw new Error('Pedido não encontrado ou link expirado.');
         }
 
-        // Validar estrutura dos dados
-        if (!data) {
-          throw new Error('Resposta vazia do servidor');
-        }
-
-        // Se data é um array, pegar o primeiro elemento
-        if (Array.isArray(data)) {
-          console.log('📦 Data é um array com', data.length, 'elementos');
-          if (data.length === 0) {
-            throw new Error('Pedido não encontrado no banco de dados');
-          }
-          orderData = data[0];
-        } else {
-          // Se não é array, usar diretamente
-          console.log('📦 Data é um objeto');
-          orderData = data;
-        }
-
-        console.log('✅ Order data final:', orderData);
-
-        // Validar campos obrigatórios
-        if (!orderData.customer_firstname) {
-          console.error('❌ Campo customer_firstname não encontrado');
-          console.error('Estrutura recebida:', Object.keys(orderData));
-          throw new Error('Dados do pedido incompletos (falta nome do cliente)');
-        }
-
+        orderData = Array.isArray(data) ? data[0] : data;
+        
+        // Validação extra dos dados retornados
         if (!orderData.items || !Array.isArray(orderData.items)) {
-          console.error('❌ Campo items não encontrado ou não é array');
-          throw new Error('Dados do pedido incompletos (falta lista de produtos)');
+          throw new Error('Dados do pedido incompletos.');
         }
 
-        console.log('🎉 Dados validados com sucesso! Renderizando página...');
         renderPage();
 
       } catch (error) {
-        console.error('❌ Erro completo:', error);
-        console.error('❌ Stack trace:', error.stack);
-
+        console.error('❌ Erro:', error);
         document.getElementById('form-container').innerHTML = `
           <div class="error">
-            <h2>❌ Erro ao Carregar Pedido</h2>
-            <p>${error.message}</p>
-            <p class="order-info">Pedido: ${orderNumber}</p>
-            <p style="margin-top: 15px; font-size: 14px;">Se o problema persistir, entre em contato conosco.</p>
-            <details style="margin-top: 20px; text-align: left; font-size: 12px; color: #666;">
-              <summary style="cursor: pointer;">Detalhes técnicos (clique para expandir)</summary>
-              <pre style="margin-top: 10px; padding: 10px; background: #f5f5f5; border-radius: 5px; overflow: auto;">${error.stack || error.message}</pre>
-            </details>
+            <h2>❌ Não foi possível carregar</h2>
+            <p>${error.message === 'Failed to fetch' ? 'Erro de conexão.' : error.message}</p>
+            <p style="margin-top: 15px; font-size: 14px;">Tente recarregar a página ou entre em contato conosco.</p>
           </div>
         `;
       }
     }
 
+    // --- RENDERIZAR PÁGINA ---
     function setStarsVisual(starsNodeList, rating) {
       starsNodeList.forEach((s, i) => {
         s.className = i < rating ? 'star filled' : 'star empty';
@@ -555,32 +162,29 @@
       return `Você selecionou: ${rating} ${rating === 1 ? 'estrela' : 'estrelas'}`;
     }
 
-    // Renderizar página com os dados
     function renderPage() {
       const container = document.getElementById('form-container');
+      
+      // Sanitização básica do nome para evitar XSS
+      const safeName = orderData.customer_firstname.replace(/[<>]/g, '');
 
       container.innerHTML = `
         <h1>Avalie seu Pedido 🌟</h1>
-        <p class="subtitle">Olá, <span class="customer-name">${orderData.customer_firstname}</span>! Abaixo você vai ver os itens que compõem o seu pedido e pode escolher aqueles que deseja avaliar. Sua opinião é muito importante para nós!</p>
+        <p class="subtitle">Olá, <span class="customer-name">${safeName}</span>! Abaixo você vai ver os itens que compõem o seu pedido e pode escolher aqueles que deseja avaliar.</p>
         <p class="order-info">📦 Pedido: #${orderNumber}</p>
         <div id="products"></div>
         <button class="btn-submit" id="submit-btn">✨ Enviar Avaliações</button>
       `;
 
       const productsContainer = document.getElementById('products');
-      const items = orderData.items;
-
-      if (!items || items.length === 0) {
-        productsContainer.innerHTML = '<p>Nenhum produto encontrado neste pedido.</p>';
-        return;
-      }
-
-      // Renderizar produtos
-      items.forEach((item) => {
+      
+      orderData.items.forEach((item) => {
         const productDiv = document.createElement('div');
         productDiv.className = 'product';
 
-        // Começar com 0 estrelas (todas vazias)
+        // Sanitização do nome do produto
+        const safeProductName = (item.product_name || 'Produto').replace(/[<>]/g, '');
+
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
           starsHtml += `<span class="star empty" data-rating="${i}">★</span>`;
@@ -588,123 +192,106 @@
 
         productDiv.innerHTML = `
           <div class="product-top">
-            <div class="product-name">${item.product_name}</div>
+            <div class="product-name">${safeProductName}</div>
             <div class="status-chip" id="status-${item.product_id}">Não avaliado</div>
           </div>
-
           <div class="stars" data-product-id="${item.product_id}">
             ${starsHtml}
           </div>
-
           <div class="rating-line" id="rating-line-${item.product_id}"></div>
-
-          <textarea id="message-${item.product_id}" placeholder="Conte mais sobre sua experiência com este produto... (opcional)" rows="3"></textarea>
+          <textarea id="message-${item.product_id}" placeholder="Conte mais sobre sua experiência... (opcional)" rows="3"></textarea>
         `;
 
         productsContainer.appendChild(productDiv);
 
+        // Lógica de Estrelas
         const stars = productDiv.querySelectorAll('.star');
         const statusChip = productDiv.querySelector(`#status-${item.product_id}`);
         const ratingLine = productDiv.querySelector(`#rating-line-${item.product_id}`);
 
-        // Clique: salva avaliação (rating >= 1)
         stars.forEach((star) => {
           star.addEventListener('click', () => {
             const rating = parseInt(star.dataset.rating);
-
             reviews[item.product_id] = {
               product_id: item.product_id,
               product_name: item.product_name,
               rating: rating
             };
-
             setStarsVisual(stars, rating);
             ratingLine.textContent = ratingLineText(rating);
-
             statusChip.textContent = 'Avaliado';
             statusChip.classList.add('done');
           });
 
-          // Hover: preview (desktop)
           star.addEventListener('mouseenter', () => {
-            const rating = parseInt(star.dataset.rating);
-            setStarsVisual(stars, rating);
+            setStarsVisual(stars, parseInt(star.dataset.rating));
           });
         });
 
-        // Ao sair do card: volta para a avaliação salva; se não tiver, volta para 0
         productDiv.addEventListener('mouseleave', () => {
           const currentRating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
           setStarsVisual(stars, currentRating);
         });
       });
 
-      // Adicionar event listener ao botão de submit
       document.getElementById('submit-btn').addEventListener('click', submitReviews);
     }
 
-    // Enviar avaliações
+    // --- ENVIAR AVALIAÇÕES ---
     async function submitReviews() {
       const reviewsArray = Object.values(reviews);
 
       if (reviewsArray.length === 0) {
-        alert('Por favor, avalie pelo menos um produto (selecione ao menos 1 estrela em algum item)!');
+        alert('Por favor, avalie pelo menos um produto!');
         return;
       }
 
-      // Adicionar mensagens aos reviews
       reviewsArray.forEach((review) => {
-        const message = document.getElementById(`message-${review.product_id}`).value;
-        review.message = message || '';
+        const msgInput = document.getElementById(`message-${review.product_id}`);
+        review.message = msgInput ? msgInput.value : '';
       });
 
       const payload = {
         order_number: orderNumber,
         customer_email: orderData.customer_email,
         customer_name: `${orderData.customer_firstname} ${orderData.customer_lastname}`,
-        reviews: reviewsArray
+        reviews: reviewsArray,
+        token: token // Enviamos o token também na confirmação
       };
 
-      console.log('📤 Enviando payload:', payload);
-
-      // Desabilitar botão
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Enviando...';
 
       try {
-        const response = await fetch('https://n8n-n8n.u7yjc3.easypanel.host/webhook-test/create_review', {
+        // URL DE PRODUÇÃO (sem -test)
+        const response = await fetch(`${N8N_BASE_URL}/webhook/create_review`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 9f3c7e8b2a4d6f1c0e5a7b9d4c2e8f6a1b0d5e3c9a7f4e2d8b6c5a1e0f7'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
-        console.log('📊 Response status:', response.status);
 
         if (response.ok) {
           document.getElementById('form-container').innerHTML = `
             <div class="success">
               <span class="emoji">✨</span>
-              <h1>Obrigado, ${orderData.customer_firstname}!</h1>
+              <h1>Obrigado!</h1>
               <p>Sua avaliação foi registrada com sucesso.</p>
-              <p style="margin-top: 20px; color: #70655C;">Agradecemos muito pelo seu feedback! 💖</p>
+              <p style="margin-top: 20px; color: #70655C;">Agradecemos muito pelo feedback! 💖</p>
             </div>
           `;
         } else {
-          throw new Error('Erro no envio da avaliação');
+          throw new Error('Erro ao processar envio');
         }
       } catch (error) {
-        console.error('❌ Erro ao enviar avaliação:', error);
-        alert('Erro ao enviar avaliação. Por favor, tente novamente.');
+        console.error('❌ Erro de envio:', error);
+        alert('Erro ao enviar avaliação. Tente novamente.');
         btn.disabled = false;
         btn.textContent = '✨ Enviar Avaliações';
       }
     }
 
-    // Iniciar busca dos dados
+    // Iniciar
     fetchOrderData();
   </script>
 </body>
