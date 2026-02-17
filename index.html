@@ -8,7 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Radio Canada Big', sans-serif;
@@ -18,6 +22,7 @@
       color: #37312F;
     }
 
+    /* Header com Logo */
     .header {
       text-align: center;
       margin-bottom: 30px;
@@ -42,6 +47,7 @@
       border: 1px solid rgba(255, 92, 127, 0.08);
     }
 
+    /* Títulos com a identidade da marca */
     h1 {
       color: #c92b5c;
       margin-bottom: 12px;
@@ -58,7 +64,11 @@
       font-weight: 400;
     }
 
-    .customer-name { font-weight: 700; color: #37312F; }
+    /* Nome do cliente em negrito */
+    .customer-name {
+      font-weight: 700;
+      color: #37312F;
+    }
 
     .order-info {
       display: inline-block;
@@ -72,6 +82,7 @@
       box-shadow: 0 4px 12px rgba(255, 92, 127, 0.25);
     }
 
+    /* Estados de Loading */
     .loading {
       text-align: center;
       padding: 60px 20px;
@@ -85,8 +96,11 @@
       font-weight: 600;
     }
 
-    .loading p { font-size: 15px; }
+    .loading p {
+      font-size: 15px;
+    }
 
+    /* Spinner animado */
     .loading::before {
       content: '';
       display: block;
@@ -99,8 +113,12 @@
       animation: spin 1s linear infinite;
     }
 
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
+    /* Estados de Erro */
     .error {
       text-align: center;
       padding: 50px 20px;
@@ -114,8 +132,12 @@
       font-weight: 600;
     }
 
-    .error p { margin-bottom: 10px; line-height: 1.6; }
+    .error p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
 
+    /* Card de Produto - Mais compacto */
     .product {
       border: 2px solid #ffe8ed;
       padding: 20px;
@@ -130,7 +152,9 @@
     .product::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 4px;
       background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%);
       opacity: 0;
@@ -143,8 +167,11 @@
       box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15);
     }
 
-    .product:hover::before { opacity: 1; }
+    .product:hover::before {
+      opacity: 1;
+    }
 
+    /* Topo do card: nome + chip */
     .product-top {
       display: flex;
       align-items: flex-start;
@@ -156,10 +183,10 @@
     .product-name {
       font-size: 18px;
       font-weight: 600;
+      margin-bottom: 0;
       color: #37312F;
       line-height: 1.4;
       flex: 1;
-      margin: 0;
     }
 
     .status-chip {
@@ -180,6 +207,7 @@
       color: #009d85;
     }
 
+    /* Sistema de Estrelas */
     .stars {
       display: flex;
       gap: 8px;
@@ -193,7 +221,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       user-select: none;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.10));
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -207,17 +235,24 @@
       text-shadow: 0 0 8px rgba(252, 228, 131, 0.6);
     }
 
-    .star:hover { transform: scale(1.15) rotate(-8deg); }
-    .star:active { transform: scale(1.05) rotate(0deg); }
+    .star:hover {
+      transform: scale(1.15) rotate(-8deg);
+    }
 
+    .star:active {
+      transform: scale(1.05) rotate(0deg);
+    }
+
+    /* Linha de confirmação da seleção */
     .rating-line {
       text-align: center;
       font-size: 13px;
       color: #70655C;
       margin-bottom: 12px;
-      min-height: 18px; /* mantém espaço mesmo vazio */
+      min-height: 18px; /* reserva espaço para não “pular” */
     }
 
+    /* Textarea */
     textarea {
       width: 100%;
       padding: 12px;
@@ -232,7 +267,10 @@
       min-height: 70px;
     }
 
-    textarea::placeholder { color: #70655C; opacity: 0.7; }
+    textarea::placeholder {
+      color: #70655C;
+      opacity: 0.7;
+    }
 
     textarea:focus {
       outline: none;
@@ -241,6 +279,7 @@
       box-shadow: 0 4px 16px rgba(255, 92, 127, 0.12);
     }
 
+    /* Botão de Envio */
     .btn-submit {
       width: 100%;
       background: linear-gradient(135deg, #00bda0 0%, #009d85 100%);
@@ -262,7 +301,8 @@
     .btn-submit::before {
       content: '';
       position: absolute;
-      top: 0; left: -100%;
+      top: 0;
+      left: -100%;
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
@@ -275,9 +315,13 @@
       box-shadow: 0 10px 30px rgba(0, 189, 160, 0.4);
     }
 
-    .btn-submit:hover::before { left: 100%; }
+    .btn-submit:hover::before {
+      left: 100%;
+    }
 
-    .btn-submit:active { transform: translateY(-1px); }
+    .btn-submit:active {
+      transform: translateY(-1px);
+    }
 
     .btn-submit:disabled {
       background: linear-gradient(135deg, #ccc 0%, #aaa 100%);
@@ -286,11 +330,23 @@
       box-shadow: none;
     }
 
-    .success { text-align: center; padding: 60px 30px; }
+    /* Mensagem de Sucesso */
+    .success {
+      text-align: center;
+      padding: 60px 30px;
+    }
 
-    .success h1 { color: #00bda0; margin-bottom: 20px; font-size: 36px; }
+    .success h1 {
+      color: #00bda0;
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
 
-    .success p { color: #70655C; font-size: 16px; line-height: 1.6; }
+    .success p {
+      color: #70655C;
+      font-size: 16px;
+      line-height: 1.6;
+    }
 
     .success .emoji {
       font-size: 80px;
@@ -299,8 +355,12 @@
       animation: bounce 0.6s ease;
     }
 
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
 
+    /* Detalhes técnicos */
     details {
       margin-top: 25px;
       padding: 15px;
@@ -309,7 +369,12 @@
       border: 1px solid #ffe8ed;
     }
 
-    summary { cursor: pointer; font-weight: 500; color: #70655C; font-size: 13px; }
+    summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: #70655C;
+      font-size: 13px;
+    }
 
     pre {
       margin-top: 12px;
@@ -322,21 +387,37 @@
       color: #37312F;
     }
 
+    /* Responsividade */
     @media (max-width: 640px) {
       body { padding: 10px; }
-      .container { padding: 30px 20px; border-radius: 16px; }
+
+      .container {
+        padding: 30px 20px;
+        border-radius: 16px;
+      }
+
       h1 { font-size: 26px; }
       .subtitle { font-size: 15px; }
       .product { padding: 16px; }
       .product-name { font-size: 16px; }
       .star { font-size: 34px; }
-      .stars { gap: 6px; padding: 8px 0 4px; }
-      .btn-submit { font-size: 16px; padding: 16px 24px; }
+
+      .stars {
+        gap: 6px;
+        padding: 8px 0 4px;
+      }
+
+      .btn-submit {
+        font-size: 16px;
+        padding: 16px 24px;
+      }
+
       .logo { max-width: 160px; }
     }
   </style>
 </head>
 <body>
+  <!-- Header com Logo da Marca -->
   <div class="header">
     <img src="https://github.com/user-attachments/assets/3b5c9c44-cb68-4715-b726-a15bfb11870a"
          alt="Linda Casa"
@@ -351,15 +432,17 @@
   </div>
 
   <script>
+    // Parse URL params
     const params = new URLSearchParams(window.location.search);
     const orderNumber = params.get('order');
 
+    // Variáveis globais
     let orderData = null;
 
-    // Reviews somente para itens efetivamente avaliados (rating >= 1).
-    // Assim "não clicou" não entra aqui, e o envio exige ao menos 1 estrela por item.
+    // IMPORTANTE: agora só entra aqui quem realmente clicou (avaliou).
     const reviews = {};
 
+    // Validar order_number
     if (!orderNumber || orderNumber.trim() === '') {
       document.getElementById('form-container').innerHTML = `
         <div class="error">
@@ -371,26 +454,33 @@
       throw new Error('Order number não encontrado');
     }
 
+    // Buscar dados do pedido no n8n (mantido como você enviou)
     async function fetchOrderData() {
       try {
         console.log('🔍 Buscando pedido:', orderNumber);
 
-        const url = \`https://n8n-n8n.u7yjc3.easypanel.host/webhook/get-order-items?order_number=\${orderNumber}\`;
+        const url = `https://n8n-n8n.u7yjc3.easypanel.host/webhook/get-order-items?order_number=${orderNumber}`;
         console.log('📡 URL da requisição:', url);
 
         const response = await fetch(url, {
           method: 'GET',
-          headers: { 'Accept': 'application/json' }
+          headers: {
+            'Accept': 'application/json'
+          }
         });
 
         console.log('📊 Response status:', response.status);
         console.log('📊 Response headers:', response.headers);
 
-        if (!response.ok) throw new Error(\`Erro HTTP: \${response.status}\`);
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
 
+        // Pegar o texto bruto primeiro para debug
         const textData = await response.text();
         console.log('📄 Response texto bruto:', textData);
 
+        // Tentar fazer parse do JSON
         let data;
         try {
           data = JSON.parse(textData);
@@ -400,27 +490,44 @@
           throw new Error('Resposta inválida do servidor');
         }
 
-        if (!data) throw new Error('Resposta vazia do servidor');
+        // Validar estrutura dos dados
+        if (!data) {
+          throw new Error('Resposta vazia do servidor');
+        }
 
+        // Se data é um array, pegar o primeiro elemento
         if (Array.isArray(data)) {
           console.log('📦 Data é um array com', data.length, 'elementos');
-          if (data.length === 0) throw new Error('Pedido não encontrado no banco de dados');
+          if (data.length === 0) {
+            throw new Error('Pedido não encontrado no banco de dados');
+          }
           orderData = data[0];
         } else {
+          // Se não é array, usar diretamente
           console.log('📦 Data é um objeto');
           orderData = data;
         }
 
         console.log('✅ Order data final:', orderData);
 
-        if (!orderData.customer_firstname) throw new Error('Dados do pedido incompletos (falta nome do cliente)');
-        if (!orderData.items || !Array.isArray(orderData.items)) throw new Error('Dados do pedido incompletos (falta lista de produtos)');
+        // Validar campos obrigatórios
+        if (!orderData.customer_firstname) {
+          console.error('❌ Campo customer_firstname não encontrado');
+          console.error('Estrutura recebida:', Object.keys(orderData));
+          throw new Error('Dados do pedido incompletos (falta nome do cliente)');
+        }
+
+        if (!orderData.items || !Array.isArray(orderData.items)) {
+          console.error('❌ Campo items não encontrado ou não é array');
+          throw new Error('Dados do pedido incompletos (falta lista de produtos)');
+        }
 
         console.log('🎉 Dados validados com sucesso! Renderizando página...');
         renderPage();
 
       } catch (error) {
         console.error('❌ Erro completo:', error);
+        console.error('❌ Stack trace:', error.stack);
 
         document.getElementById('form-container').innerHTML = `
           <div class="error">
@@ -437,17 +544,18 @@
       }
     }
 
-    function updateStars(starsNodeList, rating) {
+    function setStarsVisual(starsNodeList, rating) {
       starsNodeList.forEach((s, i) => {
         s.className = i < rating ? 'star filled' : 'star empty';
       });
     }
 
-    function ratingText(rating) {
+    function ratingLineText(rating) {
       if (!rating || rating < 1) return '';
       return `Você selecionou: ${rating} ${rating === 1 ? 'estrela' : 'estrelas'}`;
     }
 
+    // Renderizar página com os dados
     function renderPage() {
       const container = document.getElementById('form-container');
 
@@ -467,14 +575,15 @@
         return;
       }
 
+      // Renderizar produtos
       items.forEach((item) => {
         const productDiv = document.createElement('div');
         productDiv.className = 'product';
 
-        // Começa VAZIO (0): todas empty
+        // Começar com 0 estrelas (todas vazias)
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
-          starsHtml += `<span class="star empty" data-rating="${i}" role="button" aria-label="${i} estrelas">★</span>`;
+          starsHtml += `<span class="star empty" data-rating="${i}">★</span>`;
         }
 
         productDiv.innerHTML = `
@@ -483,7 +592,7 @@
             <div class="status-chip" id="status-${item.product_id}">Não avaliado</div>
           </div>
 
-          <div class="stars" data-product-id="${item.product_id}" aria-label="Selecione a nota">
+          <div class="stars" data-product-id="${item.product_id}">
             ${starsHtml}
           </div>
 
@@ -498,45 +607,43 @@
         const statusChip = productDiv.querySelector(`#status-${item.product_id}`);
         const ratingLine = productDiv.querySelector(`#rating-line-${item.product_id}`);
 
-        // Hover preview (desktop)
-        stars.forEach((star) => {
-          star.addEventListener('mouseenter', () => {
-            const rating = parseInt(star.dataset.rating, 10);
-            updateStars(stars, rating);
-          });
-        });
-
-        // Click: define avaliação (obrigatória >=1 para contar como avaliado)
+        // Clique: salva avaliação (rating >= 1)
         stars.forEach((star) => {
           star.addEventListener('click', () => {
-            const rating = parseInt(star.dataset.rating, 10);
+            const rating = parseInt(star.dataset.rating);
 
-            // salva avaliação
             reviews[item.product_id] = {
               product_id: item.product_id,
               product_name: item.product_name,
               rating: rating
             };
 
-            // atualiza visual e textos
-            updateStars(stars, rating);
-            ratingLine.textContent = ratingText(rating);
+            setStarsVisual(stars, rating);
+            ratingLine.textContent = ratingLineText(rating);
 
             statusChip.textContent = 'Avaliado';
             statusChip.classList.add('done');
           });
+
+          // Hover: preview (desktop)
+          star.addEventListener('mouseenter', () => {
+            const rating = parseInt(star.dataset.rating);
+            setStarsVisual(stars, rating);
+          });
         });
 
-        // Ao sair do card: volta para o rating salvo; se não tiver, volta para 0 (vazio)
+        // Ao sair do card: volta para a avaliação salva; se não tiver, volta para 0
         productDiv.addEventListener('mouseleave', () => {
-          const currentRating = reviews[item.product_id]?.rating || 0;
-          updateStars(stars, currentRating);
+          const currentRating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
+          setStarsVisual(stars, currentRating);
         });
       });
 
+      // Adicionar event listener ao botão de submit
       document.getElementById('submit-btn').addEventListener('click', submitReviews);
     }
 
+    // Enviar avaliações
     async function submitReviews() {
       const reviewsArray = Object.values(reviews);
 
@@ -545,14 +652,7 @@
         return;
       }
 
-      // valida: todos enviados precisam ter rating >= 1
-      const invalid = reviewsArray.find(r => !r.rating || r.rating < 1);
-      if (invalid) {
-        alert('Encontramos um item sem nota válida. Selecione ao menos 1 estrela antes de enviar.');
-        return;
-      }
-
-      // adiciona mensagens
+      // Adicionar mensagens aos reviews
       reviewsArray.forEach((review) => {
         const message = document.getElementById(`message-${review.product_id}`).value;
         review.message = message || '';
@@ -567,6 +667,7 @@
 
       console.log('📤 Enviando payload:', payload);
 
+      // Desabilitar botão
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Enviando...';
@@ -603,6 +704,7 @@
       }
     }
 
+    // Iniciar busca dos dados
     fetchOrderData();
   </script>
 </body>
