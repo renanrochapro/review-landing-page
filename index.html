@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Radio+Canada+Big:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ... CSS MANTIDO IGUAL AO ORIGINAL ... */
+    /* ... (CSS MANTIDO IGUAL) ... */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Radio Canada Big', sans-serif; background: linear-gradient(135deg, #fff5f7 0%, #ffe8ed 100%); padding: 20px; min-height: 100vh; color: #37312F; }
     .header { text-align: center; margin-bottom: 30px; padding: 20px; }
@@ -26,17 +26,14 @@
     .error { text-align: center; padding: 50px 20px; color: #8a265b; }
     .error h2 { margin-bottom: 18px; color: #c92b5c; font-size: 24px; font-weight: 600; }
     .error p { margin-bottom: 10px; line-height: 1.6; }
-    
-    /* Card de Produto */
     .product { border: 2px solid #ffe8ed; padding: 20px; margin-bottom: 20px; border-radius: 16px; background: linear-gradient(to bottom, #ffffff 0%, #fff5f7 100%); transition: all 0.3s ease; position: relative; overflow: hidden; }
     .product::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff5c7f 0%, #c92b5c 50%, #8a265b 100%); opacity: 0; transition: opacity 0.3s ease; }
     .product:hover { border-color: #ff5c7f; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 92, 127, 0.15); }
     .product:hover::before { opacity: 1; }
     
-    /* Estados de Erro no Card */
-    .product.error-border { border-color: #c92b5c !important; background: #fff0f3; }
-    .error-msg { color: #c92b5c; font-size: 13px; margin-top: 8px; font-weight: 600; display: none; padding: 8px; background: rgba(201, 43, 92, 0.1); border-radius: 6px; }
-
+    /* Novo estilo para status Pendente (Amarelo/Laranja) */
+    .status-chip.pending { border: 1px solid #ffcc00; background: #fffbe6; color: #d4a000; }
+    
     .product-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
     .product-name { font-size: 18px; font-weight: 600; margin-bottom: 0; color: #37312F; line-height: 1.4; flex: 1; }
     .status-chip { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 999px; white-space: nowrap; border: 1px solid rgba(255, 92, 127, 0.20); background: rgba(255, 92, 127, 0.10); color: #c92b5c; user-select: none; }
@@ -102,7 +99,6 @@
         <div class="error">
           <h2>❌ Link Inválido</h2>
           <p>As informações de segurança do link estão incompletas.</p>
-          <p style="margin-top: 15px; font-size: 14px;">Por favor, utilize o botão "Avaliar" enviado no seu e-mail.</p>
         </div>
       `;
       throw new Error('Parâmetros de segurança ausentes.');
@@ -146,17 +142,42 @@
     // --- RENDERIZAR PÁGINA ---
     function setStarsVisual(starsNodeList, rating) {
       starsNodeList.forEach((s, i) => {
-        s.className = i < rating ? 'star filled' : 'star empty';
+        s.className = i &lt; rating ? 'star filled' : 'star empty';
       });
+    }
+
+    // Função Auxiliar: Atualiza o status do card em TEMPO REAL
+    function updateCardStatus(productId) {
+      const rating = reviews[productId] ? reviews[productId].rating : 0;
+      const message = document.getElementById(`message-${productId}`).value.trim();
+      const statusChip = document.getElementById(`status-${productId}`);
+
+      statusChip.classList.remove('done', 'pending');
+
+      if (rating === 0 && message === '') {
+        statusChip.textContent = 'Não avaliado';
+        statusChip.style.color = '#c92b5c';
+        statusChip.style.background = 'rgba(255, 92, 127, 0.10)';
+      } 
+      else if (rating > 0 && message !== '') {
+        // COMPLETO
+        statusChip.textContent = 'Pronto para envio';
+        statusChip.classList.add('done');
+      } 
+      else {
+        // INCOMPLETO
+        statusChip.textContent = 'Em preenchimento...';
+        statusChip.classList.add('pending');
+      }
     }
 
     function renderPage() {
       const container = document.getElementById('form-container');
-      const safeName = orderData.customer_firstname.replace(/[<>]/g, '');
+      const safeName = orderData.customer_firstname.replace(/[&lt;>]/g, '');
 
       container.innerHTML = `
         <h1>Avalie seu Pedido 🌟</h1>
-        <p class="subtitle">Olá, <span class="customer-name">${safeName}</span>! Para avaliar um produto, por favor dê uma nota e deixe seu comentário. Ambos são importantes para nós!</p>
+        <p class="subtitle">Olá, <span class="customer-name">${safeName}</span>! Para avaliar um produto, por favor dê uma nota e deixe seu comentário.</p>
         <p class="order-info">📦 Pedido: #${orderNumber}</p>
         <div id="products"></div>
         <button class="btn-submit" id="submit-btn">✨ Enviar Avaliações</button>
@@ -169,10 +190,10 @@
         productDiv.className = 'product';
         productDiv.id = `product-card-${item.product_id}`;
 
-        const safeProductName = (item.product_name || 'Produto').replace(/[<>]/g, '');
+        const safeProductName = (item.product_name || 'Produto').replace(/[&lt;>]/g, '');
 
         let starsHtml = '';
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i &lt;= 5; i++) {
           starsHtml += `<span class="star empty" data-rating="${i}">★</span>`;
         }
 
@@ -187,15 +208,15 @@
           <div class="rating-line" id="rating-line-${item.product_id}"></div>
           
           <textarea id="message-${item.product_id}" placeholder="Escreva sua opinião aqui... (Obrigatório se der nota)" rows="3"></textarea>
-          <div class="error-msg" id="error-${item.product_id}"></div>
         `;
 
         productsContainer.appendChild(productDiv);
 
         const stars = productDiv.querySelectorAll('.star');
-        const statusChip = productDiv.querySelector(`#status-${item.product_id}`);
         const ratingLine = productDiv.querySelector(`#rating-line-${item.product_id}`);
+        const textarea = productDiv.querySelector('textarea');
 
+        // Evento: Clicar nas estrelas
         stars.forEach((star) => {
           star.addEventListener('click', () => {
             const rating = parseInt(star.dataset.rating);
@@ -203,77 +224,66 @@
             
             setStarsVisual(stars, rating);
             ratingLine.textContent = `Nota: ${rating}/5`;
-            statusChip.textContent = 'Em preenchimento...';
-            statusChip.classList.add('done');
             
-            // Limpa erro visual ao interagir
-            document.getElementById(`error-${item.product_id}`).style.display = 'none';
-            productDiv.classList.remove('error-border');
+            // Limpa borda vermelha se tiver corrigido
+            productDiv.style.border = '2px solid #ffe8ed';
+            
+            updateCardStatus(item.product_id);
           });
 
           star.addEventListener('mouseenter', () => {
             setStarsVisual(stars, parseInt(star.dataset.rating));
           });
         });
-        
-        // Limpa erro ao digitar no textarea também
-        const txtArea = productDiv.querySelector('textarea');
-        txtArea.addEventListener('input', () => {
-             document.getElementById(`error-${item.product_id}`).style.display = 'none';
-             productDiv.classList.remove('error-border');
-        });
 
         productDiv.addEventListener('mouseleave', () => {
           const currentRating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
           setStarsVisual(stars, currentRating);
+        });
+
+        // Evento: Digitar no texto (Atualiza o status em tempo real)
+        textarea.addEventListener('input', () => {
+          // Limpa borda vermelha ao digitar
+          productDiv.style.border = '2px solid #ffe8ed';
+          updateCardStatus(item.product_id);
         });
       });
 
       document.getElementById('submit-btn').addEventListener('click', submitReviews);
     }
 
-    // --- NOVA LÓGICA DE ENVIO E VALIDAÇÃO ---
+    // --- ENVIO COM VALIDAÇÃO ESPECÍFICA ---
     async function submitReviews() {
-      // Limpar erros anteriores
-      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.product').forEach(el => el.classList.remove('error-border'));
+      // Resetar estilos de erro
+      document.querySelectorAll('.product').forEach(el => el.style.border = '2px solid #ffe8ed');
 
       const itemsToSubmit = [];
-      let hasError = false;
-      let hasAtLeastOne = false;
+      let validationError = null;
 
-      // Iterar sobre todos os produtos da tela para validar um por um
-      orderData.items.forEach(item => {
+      // Usar loop normal para poder dar break/return fácil
+      for (const item of orderData.items) {
         const rating = reviews[item.product_id] ? reviews[item.product_id].rating : 0;
         const messageInput = document.getElementById(`message-${item.product_id}`);
         const message = messageInput.value.trim();
-        const errorDiv = document.getElementById(`error-${item.product_id}`);
         const cardDiv = document.getElementById(`product-card-${item.product_id}`);
-
-        // Cenário 1: Cliente não fez nada neste produto (OK, ignora)
-        if (rating === 0 && message === '') {
-          return;
-        }
-
-        // Cenário 2: Tem nota mas não tem texto (ERRO)
+        
+        // Validação 1: Tem nota, mas falta texto
         if (rating > 0 && message === '') {
-          errorDiv.textContent = '⚠️ Por favor, escreva um comentário para completar sua avaliação.';
-          errorDiv.style.display = 'block';
-          cardDiv.classList.add('error-border');
-          hasError = true;
-          return;
+          cardDiv.style.border = '2px solid #c92b5c';
+          cardDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          alert(`⚠️ Atenção: Preencha o campo de texto do produto "${item.product_name}" para completar sua avaliação.`);
+          return; // Para tudo
         }
 
-        // Cenário 3: Tem texto mas não tem nota (ERRO)
+        // Validação 2: Tem texto, mas falta nota
         if (rating === 0 && message.length > 0) {
-          errorDiv.textContent = '⚠️ Por favor, selecione uma nota (estrelas) para este produto.';
-          errorDiv.style.display = 'block';
-          cardDiv.classList.add('error-border');
-          hasError = true;
-          return;
+          cardDiv.style.border = '2px solid #c92b5c';
+          cardDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          alert(`⚠️ Atenção: Selecione uma nota (estrelas) para o produto "${item.product_name}".`);
+          return; // Para tudo
         }
 
-        // Cenário 4: Tudo certo (Adiciona para envio)
+        // Se estiver completo, adiciona à lista
         if (rating > 0 && message.length > 0) {
           itemsToSubmit.push({
             product_id: item.product_id,
@@ -281,21 +291,15 @@
             rating: rating,
             message: message
           });
-          hasAtLeastOne = true;
         }
-      });
-
-      if (hasError) {
-        alert('Ops! Algumas avaliações estão incompletas. Verifique os itens marcados em vermelho.');
-        return;
       }
 
-      if (!hasAtLeastOne) {
+      if (itemsToSubmit.length === 0) {
         alert('Por favor, avalie pelo menos um produto antes de enviar.');
         return;
       }
 
-      // Preparar Payload
+      // Se passou por tudo, envia
       const payload = {
         order_number: orderNumber,
         customer_email: orderData.customer_email,
